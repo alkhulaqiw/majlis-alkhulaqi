@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>عرض الموضوع — مجلس الخلاقي</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <main class="container">
+    <a href="posts.html">◀ رجوع إلى القائمة</a>
+    <article id="post"></article>
+    <section id="comments"></section>
+  </main>
+  <script>
+    function getQuery(name){
+      const url = new URL(location.href);
+      return url.searchParams.get(name);
+    }
+    async function loadPost(){
+      const id = getQuery('id') || '1';
+      try{
+        const res = await fetch('/api/posts/'+id+'.json');
+        const data = await res.json();
+        document.getElementById('post').innerHTML = `<h1>${data.title}</h1><div class='meta'>${data.author} • ${data.date}</div><div class='content'>${data.body}</div>`;
+        document.getElementById('comments').innerHTML = data.comments.map(c=>`<div class='comment'><b>${c.author}</b><p>${c.text}</p></div>`).join('');
+      }catch(e){
+        document.getElementById('post').innerText = 'تعذر تحميل الموضوع.';
+      }
+    }
+    loadPost();
+  </script>
+</body>
+</html>

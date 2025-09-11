@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>المشاركات — مجلس الخلاقي</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>قائمة المشاركات</h1>
+    <form id="filterForm">
+      <input id="q" name="q" placeholder="ابحث في العناوين...">
+      <select id="sectionFilter">
+        <option value="">كل الأقسام</option>
+        <option>المجلس العام</option>
+        <option>المجلس السياسي</option>
+      </select>
+      <button type="submit">فلتر</button>
+    </form>
+
+    <ul id="postsList"></ul>
+  </main>
+  <script>
+    async function loadPosts(q=''){
+      const url = '/api/posts.json' + (q?('?q='+encodeURIComponent(q)):'');
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const ul = document.getElementById('postsList');
+        ul.innerHTML = data.map(p=>`<li><a href="post.html?id=${p.id}">${p.title}</a> <span class='muted'>• ${p.date}</span></li>`).join('');
+      } catch(e){
+        document.getElementById('postsList').innerHTML = '<li>خطأ في جلب المشاركات</li>';
+      }
+    }
+
+    document.getElementById('filterForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      loadPosts(document.getElementById('q').value);
+    });
+
+    loadPosts();
+  </script>
+</body>
+</html>

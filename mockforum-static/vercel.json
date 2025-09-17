@@ -1,1 +1,7 @@
-{ "builds": [], "routes": [] }
+{
+  "rewrites": [
+    { "source": "/posts", "destination": "/posts.html" },
+    { "source": "/post/:id", "destination": "/post.html" },
+    { "source": "/auth", "destination": "/auth.html" }
+  ]
+}

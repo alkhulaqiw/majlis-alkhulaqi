@@ -1,10 +1,19 @@
-[
-  {
-    "id": 1,
-    "title": "أول منشور في مجلس الخلاقي",
-    "content": "مرحبًا بكم في مجتمعنا العربي الرقمي الجديد! هنا نشارك الأفكار، المقالات، والتجارب بدون قيود.",
-    "author": "أحمد الخلاقي",
-    "date": "2025-04-05",
-    "likes": 12
-  }
-]
+fetch('api/posts.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('فشل تحميل المنشورات');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // عرض المنشورات هنا
+    displayPosts(data);
+  })
+  .catch(error => {
+    console.error('خطأ:', error);
+    document.getElementById('posts-container').innerHTML = `
+      <div class="error">
+        ⚠️ لا يمكن تحميل المنشورات. تأكد من تشغيل الخادم المحلي.
+      </div>
+    `;
+  });
